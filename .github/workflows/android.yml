@@ -1,19 +1,16 @@
-name: Build RevampedFMRadio APK
+name: Build RevampedFMRadio
 
 on:
   workflow_dispatch:
-  push:
-    branches: [ "main" ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository with gradlew
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
-          repository: BGCX067/RevampedFMRadio-apk-builder
-          ref: main
+          repository: muvon/RevampedFMRadio
+          ref: master
           
       - name: Set up JDK 11
         uses: actions/setup-java@v4
@@ -23,12 +20,12 @@ jobs:
           
       - name: Make gradlew executable
         run: chmod +x gradlew
-          
-      - name: Build with Gradle
+        
+      - name: Build APK
         run: ./gradlew assembleRelease
-          
+        
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: RevampedFMRadio
+          name: RevampedFMRadio-APK
           path: app/build/outputs/apk/release/*.apk

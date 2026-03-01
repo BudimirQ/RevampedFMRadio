@@ -1,19 +1,19 @@
-name: Build RevampedFMRadio for MTK
+name: Build RevampedFMRadio APK
 
 on:
   workflow_dispatch:
   push:
-    branches: [ "mtk" ]
+    branches: [ "main" ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout repository with gradlew
         uses: actions/checkout@v4
         with:
-          repository: iusmac/RevampedFMRadio
-          ref: mtk
+          repository: BGCX067/RevampedFMRadio-apk-builder
+          ref: main
           
       - name: Set up JDK 11
         uses: actions/setup-java@v4
@@ -21,13 +21,14 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
           
+      - name: Make gradlew executable
+        run: chmod +x gradlew
+          
       - name: Build with Gradle
-        run: |
-          chmod +x gradlew
-          ./gradlew assembleRelease
+        run: ./gradlew assembleRelease
           
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: RevampedFMRadio-MTK
+          name: RevampedFMRadio
           path: app/build/outputs/apk/release/*.apk
